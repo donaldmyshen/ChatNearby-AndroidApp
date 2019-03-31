@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp">
+
+    <TextView
+            android:id="@+id/textview_to_row"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="This is my message that will wrap into multiple lines and keep going"
+            android:background="@drawable/shape_bg_incoming_bubble"
+            android:paddingStart="20dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="8dp"
+            android:textColor="@android:color/black"
+            android:paddingBottom="8dp"
+            android:maxWidth="240dp"
+            app:layout_constraintStart_toEndOf="@+id/imageview_chat_to_row"
+            app:layout_constraintTop_toTopOf="@+id/imageview_chat_to_row"/>
+
+    <TextView
+            android:id="@+id/to_msg_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp"
+            android:text="16 Sep, 2:05 PM"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textview_to_row"
+            app:layout_constraintTop_toBottomOf="@+id/textview_to_row"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageview_chat_to_row"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/no_image2"
+            app:civ_border_color="@android:color/black"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>

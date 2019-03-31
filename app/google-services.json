@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "620292261500",
+    "firebase_url": "https://chatnearby-88913.firebaseio.com",
+    "project_id": "chatnearby-88913",
+    "storage_bucket": "chatnearby-88913.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:620292261500:android:ada6b23be4a13e91",
+        "android_client_info": {
+          "package_name": "com.example.chatnearby"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "620292261500-4iml92r5ian9mljfqmmjnfavi9cml6l1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chatnearby",
+            "certificate_hash": "c20aa7f60ba74a05a3a1d0508a37599d36f8923a"
+          }
+        },
+        {
+          "client_id": "620292261500-0112cuql5un4ki97kh39vgu152cfmo0l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chatnearby",
+            "certificate_hash": "0a1e8d5753e1cd32d3c17622c043e0f2b6a0213b"
+          }
+        },
+        {
+          "client_id": "620292261500-a8cepen9k1jcjng3v4etfr17bg8jq4qk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBhMx7nCTKRGakwnWucrCQFEPN1dgced4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "620292261500-a8cepen9k1jcjng3v4etfr17bg8jq4qk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
