@@ -2,12 +2,12 @@ package com.example.chatnearby.messages
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.GestureDetectorCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
+import android.view.GestureDetector
+import android.view.MotionEvent
 import com.example.chatnearby.models.ChatMessage
 import com.example.chatnearby.models.User
 import com.example.chatnearby.R
@@ -22,9 +22,10 @@ import kotlinx.android.synthetic.main.activity_latest_messages.*
 
 class LatestMessagesActivity : AppCompatActivity() {
 
+    private lateinit var mDetector: GestureDetectorCompat
+
     private val adapter = GroupAdapter<ViewHolder>()
     private val latestMessagesMap = HashMap<String, ChatMessage>()
-
 
     companion object {
         var currentUser: User? = null
@@ -33,6 +34,9 @@ class LatestMessagesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        mDetector = GestureDetectorCompat(this, MyGestureListener())
+
         setContentView(R.layout.activity_latest_messages)
         verifyUserIsLoggedIn()
 
@@ -60,6 +64,32 @@ class LatestMessagesActivity : AppCompatActivity() {
             verifyUserIsLoggedIn()
             fetchCurrentUser()
             listenForLatestMessages()
+        }
+
+
+    }
+
+    override fun onTouchEvent(event: MotionEvent) : Boolean {
+        mDetector.onTouchEvent(event)
+        return super.onTouchEvent(event)
+    }
+
+    private inner class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
+
+        private var swipedistance = 150
+        // Swiping right
+        override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+            if(e2.x - e1.x > swipedistance) {
+                val intent = Intent(this@LatestMessagesActivity, NewMessageActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            return false
+        }
+        override fun onDoubleTap(e: MotionEvent?): Boolean {
+            val intent = Intent(this@LatestMessagesActivity, NewMessageActivity::class.java)
+            startActivity(intent)
+            return true
         }
     }
 
