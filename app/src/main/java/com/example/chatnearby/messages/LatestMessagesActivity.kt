@@ -7,6 +7,8 @@ import android.support.v4.view.GestureDetectorCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.GestureDetector
+import android.view.Menu
+import android.view.MenuItem
 import android.view.MotionEvent
 import com.example.chatnearby.models.ChatMessage
 import com.example.chatnearby.models.User
@@ -35,10 +37,10 @@ class LatestMessagesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mDetector = GestureDetectorCompat(this, MyGestureListener())
-
         setContentView(R.layout.activity_latest_messages)
         verifyUserIsLoggedIn()
+
+        mDetector = GestureDetectorCompat(this, MyGestureListener())
 
         recyclerview_latest_messages.adapter = adapter
 
@@ -86,6 +88,7 @@ class LatestMessagesActivity : AppCompatActivity() {
             }
             return false
         }
+        // use for test
         override fun onDoubleTap(e: MotionEvent?): Boolean {
             val intent = Intent(this@LatestMessagesActivity, NewMessageActivity::class.java)
             startActivity(intent)
@@ -170,12 +173,11 @@ class LatestMessagesActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-    /*
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.nav_menu, menu)
         return super.onCreateOptionsMenu(menu)
-    }*/
-/*
+    }
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
 
@@ -188,7 +190,7 @@ class LatestMessagesActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
-    }*/
+    }
 
 
 }

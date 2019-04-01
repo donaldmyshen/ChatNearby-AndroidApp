@@ -52,7 +52,6 @@ class NewMessageActivity : AppCompatActivity() {
         val ref = FirebaseDatabase.getInstance().getReference("/users")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {
-
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
