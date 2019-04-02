@@ -1,7 +1,10 @@
 package com.example.chatnearby.messages
 
+import android.annotation.TargetApi
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.GestureDetectorCompat
 import android.support.v7.app.AppCompatActivity
@@ -34,13 +37,14 @@ class LatestMessagesActivity : AppCompatActivity() {
         val TAG = LatestMessagesActivity::class.java.simpleName
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_latest_messages)
         verifyUserIsLoggedIn()
 
-        mDetector = GestureDetectorCompat(this, MyGestureListener())
+
 
         recyclerview_latest_messages.adapter = adapter
 
@@ -48,6 +52,7 @@ class LatestMessagesActivity : AppCompatActivity() {
 
         fetchCurrentUser()
         listenForLatestMessages()
+        mDetector = GestureDetectorCompat(this, MyGestureListener())
 
         adapter.setOnItemClickListener { item, _ ->
             val intent = Intent(this, ChatLogActivity::class.java)
@@ -80,6 +85,7 @@ class LatestMessagesActivity : AppCompatActivity() {
 
         private var swipedistance = 150
         // Swiping right
+
         override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
             if(e2.x - e1.x > swipedistance) {
                 val intent = Intent(this@LatestMessagesActivity, NewMessageActivity::class.java)
