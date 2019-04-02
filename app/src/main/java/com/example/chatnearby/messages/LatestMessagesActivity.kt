@@ -76,7 +76,7 @@ class LatestMessagesActivity : AppCompatActivity() {
 
     }
 
-    override fun onTouchEvent(event: MotionEvent) : Boolean {
+    override fun dispatchTouchEvent(event: MotionEvent) : Boolean {
         mDetector.onTouchEvent(event)
         return super.onTouchEvent(event)
     }
