@@ -11,7 +11,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.chatnearby.R
-import com.example.chatnearby.messages.LatestMessagesActivity
+import com.example.chatnearby.messages.MessageMenuActivity
 import com.example.chatnearby.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -82,30 +82,30 @@ class RegisterActivity : AppCompatActivity() {
             Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show()
             return
         }
-    /*
-        if (selectedPhotoUri == null) {
-            Toast.makeText(this, "Please select a photo", Toast.LENGTH_SHORT).show()
-            return
-        }
-    */
+        /*
+            if (selectedPhotoUri == null) {
+                Toast.makeText(this, "Please select a photo", Toast.LENGTH_SHORT).show()
+                return
+            }
+        */
         already_have_account_text_view.visibility = View.GONE
         loading_view.visibility = View.VISIBLE
 
         // Firebase Authentication to create a user with email and password
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener {
-                    if (!it.isSuccessful) return@addOnCompleteListener
+            .addOnCompleteListener {
+                if (!it.isSuccessful) return@addOnCompleteListener
 
-                    // else if successful
-                    Log.d(TAG, "Successfully created user with uid: ${it.result!!.user.uid}")
-                    uploadImageToFirebaseStorage()
-                }
-                .addOnFailureListener {
-                    Log.d(TAG, "Failed to create user: ${it.message}")
-                    loading_view.visibility = View.GONE
-                    already_have_account_text_view.visibility = View.VISIBLE
-                    Toast.makeText(this, "${it.message}", Toast.LENGTH_LONG).show()
-                }
+                // else if successful
+                Log.d(TAG, "Successfully created user with uid: ${it.result!!.user.uid}")
+                uploadImageToFirebaseStorage()
+            }
+            .addOnFailureListener {
+                Log.d(TAG, "Failed to create user: ${it.message}")
+                loading_view.visibility = View.GONE
+                already_have_account_text_view.visibility = View.VISIBLE
+                Toast.makeText(this, "${it.message}", Toast.LENGTH_LONG).show()
+            }
     }
 
     private fun uploadImageToFirebaseStorage() {
@@ -116,20 +116,20 @@ class RegisterActivity : AppCompatActivity() {
             val filename = UUID.randomUUID().toString()
             val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
             ref.putFile(selectedPhotoUri!!)
-                    .addOnSuccessListener {
-                        Log.d(TAG, "Successfully uploaded image: ${it.metadata?.path}")
+                .addOnSuccessListener {
+                    Log.d(TAG, "Successfully uploaded image: ${it.metadata?.path}")
 
-                        @Suppress("NestedLambdaShadowedImplicitParameter")
-                        ref.downloadUrl.addOnSuccessListener {
-                            Log.d(TAG, "File Location: $it")
-                            saveUserToFirebaseDatabase(it.toString())
-                        }
+                    @Suppress("NestedLambdaShadowedImplicitParameter")
+                    ref.downloadUrl.addOnSuccessListener {
+                        Log.d(TAG, "File Location: $it")
+                        saveUserToFirebaseDatabase(it.toString())
                     }
-                    .addOnFailureListener {
-                        Log.d(TAG, "Failed to upload image to storage: ${it.message}")
-                        loading_view.visibility = View.GONE
-                        already_have_account_text_view.visibility = View.VISIBLE
-                    }
+                }
+                .addOnFailureListener {
+                    Log.d(TAG, "Failed to upload image to storage: ${it.message}")
+                    loading_view.visibility = View.GONE
+                    already_have_account_text_view.visibility = View.VISIBLE
+                }
         }
 
     }
@@ -145,19 +145,19 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         ref.setValue(user)
-                .addOnSuccessListener {
-                    Log.d(TAG, "Finally we saved the user to Firebase Database")
+            .addOnSuccessListener {
+                Log.d(TAG, "Finally we saved the user to Firebase Database")
 
-                    val intent = Intent(this, LatestMessagesActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
-                    overridePendingTransition(R.anim.enter, R.anim.exit)
-                }
-                .addOnFailureListener {
-                    Log.d(TAG, "Failed to set value to database: ${it.message}")
-                    loading_view.visibility = View.GONE
-                    already_have_account_text_view.visibility = View.VISIBLE
-                }
+                val intent = Intent(this, MessageMenuActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                overridePendingTransition(R.anim.enter, R.anim.exit)
+            }
+            .addOnFailureListener {
+                Log.d(TAG, "Failed to set value to database: ${it.message}")
+                loading_view.visibility = View.GONE
+                already_have_account_text_view.visibility = View.VISIBLE
+            }
     }
 }
 

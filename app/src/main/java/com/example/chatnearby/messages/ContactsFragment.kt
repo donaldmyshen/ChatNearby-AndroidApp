@@ -1,12 +1,16 @@
 package com.example.chatnearby.messages
 
+
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.chatnearby.R
@@ -23,24 +27,24 @@ import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_new_message.*
 import kotlinx.android.synthetic.main.user_row_new_message.view.*
 
-class NewMessageActivity : AppCompatActivity() {
+class ContactsFragment : Fragment() {
 
     companion object {
         const val USER_KEY = "USER_KEY"
-        private val TAG = NewMessageActivity::class.java.simpleName
+        private val TAG = ContactsFragment::class.java.simpleName
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new_message)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return layoutInflater.inflate(R.layout.fragment_new_message, container, false)
+    }
 
-        swiperefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent))
+    override fun onStart() {
+        super.onStart()
+        swiperefresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
 
-        supportActionBar?.title = "Select User"
+        //supportActionBar?.title = "Select User"
 
         fetchUsers()
-        //Todo - Add more users and messages for screenshots
-
         swiperefresh.setOnRefreshListener {
             fetchUsers()
         }
@@ -62,7 +66,7 @@ class NewMessageActivity : AppCompatActivity() {
                     @Suppress("NestedLambdaShadowedImplicitParameter")
                     it.getValue(User::class.java)?.let {
                         if (it.uid != FirebaseAuth.getInstance().uid) {
-                            adapter.add(UserItem(it, this@NewMessageActivity))
+                            adapter.add(UserItem(it, requireContext()))
                         }
                     }
                 }
@@ -72,7 +76,7 @@ class NewMessageActivity : AppCompatActivity() {
                     val intent = Intent(view.context, ChatLogActivity::class.java)
                     intent.putExtra(USER_KEY, userItem.user)
                     startActivity(intent)
-                    finish()
+
                 }
 
                 recyclerview_newmessage.adapter = adapter
@@ -82,6 +86,7 @@ class NewMessageActivity : AppCompatActivity() {
         })
     }
 }
+
 
 class UserItem(val user: User, val context: Context) : Item<ViewHolder>() {
 
@@ -93,13 +98,13 @@ class UserItem(val user: User, val context: Context) : Item<ViewHolder>() {
 
 
             Glide.with(viewHolder.itemView.imageview_new_message.context)
-                    .load(user.profileImageUrl)
-                    .apply(requestOptions)
-                    .into(viewHolder.itemView.imageview_new_message)
+                .load(user.profileImageUrl)
+                .apply(requestOptions)
+                .into(viewHolder.itemView.imageview_new_message)
 
             viewHolder.itemView.imageview_new_message.setOnClickListener {
                 BigImageDialog.newInstance(user?.profileImageUrl!!).show((context as Activity).fragmentManager
-                        , "")
+                    , "")
             }
         }
     }

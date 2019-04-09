@@ -39,9 +39,9 @@ class BigImageDialog : DialogFragment() {
         val requestOptions = RequestOptions().placeholder(circularProgressDrawable)
 
         Glide.with(this.dialog.context)
-                .load(imageUrl)
-                .apply(requestOptions)
-                .into(v.bigImageView)
+            .load(imageUrl)
+            .apply(requestOptions)
+            .into(v.bigImageView)
 
         //todo: add bounce effect while loading images glide
 
@@ -52,10 +52,10 @@ class BigImageDialog : DialogFragment() {
     companion object {
         @JvmStatic
         fun newInstance(imageUrl: String) =
-                BigImageDialog().apply {
-                    arguments = Bundle().apply {
-                        putString("url", imageUrl)
-                    }
+            BigImageDialog().apply {
+                arguments = Bundle().apply {
+                    putString("url", imageUrl)
                 }
+            }
     }
 }

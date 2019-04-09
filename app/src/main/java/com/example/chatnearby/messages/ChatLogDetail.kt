@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.chat_to_row.view.*
 class ChatLogActivity : AppCompatActivity() {
 
     companion object {
+        const val USER_KEY = "USER_KEY"
         val TAG = ChatLogActivity::class.java.simpleName
     }
 
@@ -30,7 +31,7 @@ class ChatLogActivity : AppCompatActivity() {
 
     // Bundle Data
     private val toUser: User
-        get() = intent.getParcelableExtra(NewMessageActivity.USER_KEY)
+        get() = intent.getParcelableExtra(USER_KEY)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +85,7 @@ class ChatLogActivity : AppCompatActivity() {
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 dataSnapshot.getValue(ChatMessage::class.java)?.let {
                     if (it.fromId == FirebaseAuth.getInstance().uid) {
-                        val currentUser = LatestMessagesActivity.currentUser ?: return
+                        val currentUser = MessageMenuActivity.currentUser ?: return
                         adapter.add(ChatFromItem(it.text, currentUser, it.timestamp))
                     } else {
                         adapter.add(ChatToItem(it.text, toUser, it.timestamp))
@@ -117,11 +118,11 @@ class ChatLogActivity : AppCompatActivity() {
 
         val chatMessage = ChatMessage(reference.key!!, text, fromId, toId, System.currentTimeMillis() / 1000)
         reference.setValue(chatMessage)
-                .addOnSuccessListener {
-                    Log.d(TAG, "Saved our chat message: ${reference.key}")
-                    edittext_chat_log.text.clear()
-                    recyclerview_chat_log.smoothScrollToPosition(adapter.itemCount - 1)
-                }
+            .addOnSuccessListener {
+                Log.d(TAG, "Saved our chat message: ${reference.key}")
+                edittext_chat_log.text.clear()
+                recyclerview_chat_log.smoothScrollToPosition(adapter.itemCount - 1)
+            }
 
         toReference.setValue(chatMessage)
 
@@ -150,10 +151,10 @@ class ChatFromItem(val text: String, val user: User, val timestamp: Long) : Item
 
 
             Glide.with(targetImageView.context)
-                    .load(user.profileImageUrl)
-                    .thumbnail(0.1f)
-                    .apply(requestOptions)
-                    .into(targetImageView)
+                .load(user.profileImageUrl)
+                .thumbnail(0.1f)
+                .apply(requestOptions)
+                .into(targetImageView)
 
         }
     }
@@ -177,10 +178,10 @@ class ChatToItem(val text: String, val user: User, val timestamp: Long) : Item<V
             val requestOptions = RequestOptions().placeholder(R.drawable.no_image2)
 
             Glide.with(targetImageView.context)
-                    .load(user.profileImageUrl)
-                    .thumbnail(0.1f)
-                    .apply(requestOptions)
-                    .into(targetImageView)
+                .load(user.profileImageUrl)
+                .thumbnail(0.1f)
+                .apply(requestOptions)
+                .into(targetImageView)
 
         }
     }

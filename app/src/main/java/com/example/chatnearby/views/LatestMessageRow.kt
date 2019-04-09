@@ -1,10 +1,10 @@
 package com.example.chatnearby.views
 
 import android.app.Activity
-import android.content.Context
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.chatnearby.R
+import com.example.chatnearby.messages.MessageListFragment
 import com.example.chatnearby.models.ChatMessage
 import com.example.chatnearby.models.User
 import com.example.chatnearby.utils.DateUtils
@@ -18,7 +18,7 @@ import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.latest_message_row.view.*
 
 
-class LatestMessageRow(val chatMessage: ChatMessage, val context: Context) : Item<ViewHolder>() {
+class LatestMessageRow(val chatMessage: ChatMessage, val context: MessageListFragment) : Item<ViewHolder>() {
 
     var chatPartnerUser: User? = null
 
@@ -51,13 +51,13 @@ class LatestMessageRow(val chatMessage: ChatMessage, val context: Context) : Ite
                     val requestOptions = RequestOptions().placeholder(R.drawable.no_image2)
 
                     Glide.with(viewHolder.itemView.imageview_latest_message.context)
-                            .load(chatPartnerUser?.profileImageUrl)
-                            .apply(requestOptions)
-                            .into(viewHolder.itemView.imageview_latest_message)
+                        .load(chatPartnerUser?.profileImageUrl)
+                        .apply(requestOptions)
+                        .into(viewHolder.itemView.imageview_latest_message)
 
                     viewHolder.itemView.imageview_latest_message.setOnClickListener {
                         BigImageDialog.newInstance(chatPartnerUser?.profileImageUrl!!).show((context as Activity).fragmentManager
-                                , "")
+                            , "")
                     }
 
                 }
