@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar!!.elevation = 0.0f
 
         Glide.with(this).asGif()
-            .load("https://media1.tenor.com/images/1d550cc7494b9ac5a85fbe4f6bc184c8/tenor.gif?itemid=11525834")
+            .load("https://media1.tenor.com/images/e9a2b43613bdde8dea94e81c4ca7e4c2/tenor.gif?itemid=5072286")
             .apply(RequestOptions.circleCropTransform())
             .into(kotlinImageView)
 

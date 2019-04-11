@@ -25,7 +25,6 @@ class BigImageDialog : DialogFragment() {
         }
     }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.image_dialog_layout, container, false)
         this.dialog.window.requestFeature(Window.FEATURE_NO_TITLE)
@@ -42,8 +41,6 @@ class BigImageDialog : DialogFragment() {
             .load(imageUrl)
             .apply(requestOptions)
             .into(v.bigImageView)
-
-        //todo: add bounce effect while loading images glide
 
         return v
     }
