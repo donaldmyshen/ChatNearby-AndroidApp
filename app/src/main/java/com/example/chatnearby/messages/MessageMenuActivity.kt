@@ -15,6 +15,7 @@ import com.example.chatnearby.models.ChatMessage
 import com.example.chatnearby.models.User
 import com.example.chatnearby.R
 import com.example.chatnearby.account.RegisterActivity
+import com.example.chatnearby.nearby.GetLocationActivity
 import com.example.chatnearby.views.LatestMessageRow
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -90,6 +91,12 @@ class MessageMenuActivity : AppCompatActivity() {
             R.id.menu_sign_out -> {
                 FirebaseAuth.getInstance().signOut()
                 val intent = Intent(this, RegisterActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+
+            R.id.menu_get_loc -> {
+                val intent = Intent(this, GetLocationActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }

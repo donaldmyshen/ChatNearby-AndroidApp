@@ -3,6 +3,12 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+            android:id="@+id/menu_get_loc"
+            android:title="Get Localization"
+            android:icon="@drawable/common_full_open_on_phone"
+            app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/menu_sign_out"
         android:title="Sign Out"
         android:icon="@drawable/ic_power_settings_new_black_24dp"
