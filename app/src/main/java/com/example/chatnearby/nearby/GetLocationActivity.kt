@@ -37,10 +37,14 @@ class GetLocationActivity : AppCompatActivity() {
 
                 var lastLocation = p0.lastLocation
                 var myLat: Double = lastLocation.latitude
+
                 var myLong: Double = lastLocation.longitude
+
                 textView.text = "Lat: ${myLat} Long: ${myLong}"
             }
         }
+
+        startLocationUpdates()
     }
 
     override fun onResume() {
@@ -69,7 +73,6 @@ class GetLocationActivity : AppCompatActivity() {
                 startLocationUpdates()
             }
         }
-
     }
 
     private fun createLocationRequest() {

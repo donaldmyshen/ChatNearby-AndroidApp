@@ -54,19 +54,28 @@ class ContactsFragment : Fragment() {
         swiperefresh.isRefreshing = true
 
         val ref = FirebaseDatabase.getInstance().getReference("/users")
+        val s = ref.child("uid").equals("6gCAyWGL2qQhTdj06nNAVSD3O9z2")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val adapter = GroupAdapter<ViewHolder>()
-
+                var curLon = 0.0
                 dataSnapshot.children.forEach {
                     Log.d(TAG, it.toString())
                     @Suppress("NestedLambdaShadowedImplicitParameter")
                     it.getValue(User::class.java)?.let {
-                        if (it.uid != FirebaseAuth.getInstance().uid) {
-                            adapter.add(UserItem(it, requireContext()))
+                        var id  = FirebaseAuth.getInstance().uid
+
+                        if (it.uid == id) {
+                            curLon = it.lon
+                        }
+                        if (it.uid != id){
+                            //here judge the lat and lon
+                            if (it.lon < curLon) {
+                                adapter.add(UserItem(it, requireContext()))
+                            }
                         }
                     }
                 }

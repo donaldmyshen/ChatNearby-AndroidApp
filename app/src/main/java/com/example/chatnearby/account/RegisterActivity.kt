@@ -139,9 +139,10 @@ class RegisterActivity : AppCompatActivity() {
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
 
         val user = if (profileImageUrl == null) {
-            User(uid, name_edittext_register.text.toString(), null)
+            // lon and lat need to get here
+            User(uid, name_edittext_register.text.toString(), 31.22, 32.33, null)
         } else {
-            User(uid, name_edittext_register.text.toString(), profileImageUrl)
+            User(uid, name_edittext_register.text.toString(), 31.22, 32.33, profileImageUrl)
         }
 
         ref.setValue(user)
