@@ -2,9 +2,11 @@ package com.example.chatnearby.account
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.support.v4.app.ActivityCompat
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -13,6 +15,7 @@ import android.widget.Toast
 import com.example.chatnearby.R
 import com.example.chatnearby.messages.MessageMenuActivity
 import com.example.chatnearby.models.User
+import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -23,6 +26,10 @@ import java.util.*
 class RegisterActivity : AppCompatActivity() {
 
     private var selectedPhotoUri: Uri? = null
+
+    var myLat: Double = 0.0
+    var myLong: Double = 0.0
+
 
     companion object {
         val TAG = RegisterActivity::class.java.simpleName!!
@@ -50,6 +57,31 @@ class RegisterActivity : AppCompatActivity() {
             intent.type = "image/*"
             startActivityForResult(intent, 0)
         }
+
+
+        if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE)
+        }
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        createLocationRequest()
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(p0: LocationResult) {
+                super.onLocationResult(p0)
+
+                var lastLocation = p0.lastLocation
+
+                myLat = lastLocation.latitude
+
+                myLong = lastLocation.longitude
+
+            }
+        }
+
+        startLocationUpdates()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -140,9 +172,9 @@ class RegisterActivity : AppCompatActivity() {
 
         val user = if (profileImageUrl == null) {
             // lon and lat need to get here
-            User(uid, name_edittext_register.text.toString(), 31.22, 32.33, null)
+            User(uid, name_edittext_register.text.toString(), myLong, myLat, null)
         } else {
-            User(uid, name_edittext_register.text.toString(), 31.22, 32.33, profileImageUrl)
+            User(uid, name_edittext_register.text.toString(), myLong, myLat, profileImageUrl)
         }
 
         ref.setValue(user)
@@ -159,6 +191,63 @@ class RegisterActivity : AppCompatActivity() {
                 loading_view.visibility = View.GONE
                 already_have_account_text_view.visibility = View.VISIBLE
             }
+    }
+
+    private var permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+    private var REQUEST_CODE = 1001
+    private lateinit var fusedLocationClient : FusedLocationProviderClient
+    private lateinit var locationRequest : LocationRequest
+    private lateinit var locationCallback : LocationCallback
+
+    private var locationUpdateState = false
+
+
+    override fun onResume() {
+        super.onResume()
+        if(locationUpdateState) {
+            startLocationUpdates()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        this.fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
+    private fun startLocationUpdates() {
+        if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return
+        }
+        this.fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if(requestCode == REQUEST_CODE) {
+            if(grantResults.size == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                startLocationUpdates()
+            }
+        }
+    }
+
+    private fun createLocationRequest() {
+        locationRequest = LocationRequest()
+
+        locationRequest.interval = 10000
+
+        locationRequest.fastestInterval = 5000
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+
+        var builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
+
+        val client = LocationServices.getSettingsClient(this)
+        val task = client.checkLocationSettings(builder.build())
+
+        task.addOnSuccessListener {
+            locationUpdateState = true
+            startLocationUpdates()
+        }
     }
 }
 
