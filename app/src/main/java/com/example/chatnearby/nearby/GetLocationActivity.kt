@@ -15,6 +15,7 @@ import android.util.Log
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.chatnearby.messages.ChatLogActivity
+import com.example.chatnearby.messages.MessageMenuActivity
 import com.example.chatnearby.models.User
 import com.example.chatnearby.views.BigImageDialog
 import com.google.firebase.auth.FirebaseAuth
@@ -34,7 +35,7 @@ class GetLocationActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient : FusedLocationProviderClient
     private lateinit var locationRequest : LocationRequest
     private lateinit var locationCallback : LocationCallback
-
+    var currentUser: User? = null
     private var locationUpdateState = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,10 +56,13 @@ class GetLocationActivity : AppCompatActivity() {
                 super.onLocationResult(p0)
 
                 var lastLocation = p0.lastLocation
-                var myLat: Double = lastLocation.latitude
 
-                var myLong: Double = lastLocation.longitude
+                val uid = FirebaseAuth.getInstance().uid ?: return
 
+                val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+                //HashMap<String, O>
+                ref.child("lat").setValue(lastLocation.latitude)
+                ref.child("lon").setValue(lastLocation.longitude)
             }
         }
 
@@ -218,8 +222,25 @@ class GetLocationActivity : AppCompatActivity() {
 
     private fun fetchUsers() {
         swiperefresh.isRefreshing = true
-
+        val uid = FirebaseAuth.getInstance().uid ?: return
         val ref = FirebaseDatabase.getInstance().getReference("/users")
+        val ref2 = FirebaseDatabase.getInstance().getReference("/users/$uid")
+        ref2.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(databaseError: DatabaseError) {
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                currentUser = dataSnapshot.getValue(User::class.java)
+            }
+
+        })
+        var myLon = 0.0
+        var myLat = 0.0
+        if (currentUser != null) {
+             myLon = currentUser!!.lon
+             myLat = currentUser!!.lat
+        }
+
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {
 
@@ -227,23 +248,18 @@ class GetLocationActivity : AppCompatActivity() {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val adapter = GroupAdapter<ViewHolder>()
-                var myLong = 0.0
-                var myLat = 0.0
+
+
                 dataSnapshot.children.forEach {
                     Log.d(TAG, it.toString())
                     @Suppress("NestedLambdaShadowedImplicitParameter")
                     it.getValue(User::class.java)?.let {
-                        var id  = FirebaseAuth.getInstance().uid
+                        //var id  = FirebaseAuth.getInstance().uid
 
-                        if (it.uid == id) {
-                            myLong = it.lon
-                            myLat = it.lat
-
-                        }
-                        if (it.uid != id){
+                        if (it.uid != uid){
                             //here judge the lat and lon
-                            var dis = getDistandce(myLat,myLong,it.lat,it.lon)
-                            if (dis < 10000000.0) {
+                            var dis = getDistandce(myLat,myLon,it.lat,it.lon)
+                            if (dis < 1.0) {
                             adapter.add(UserItem(it, this@GetLocationActivity))
                             }
                         }
