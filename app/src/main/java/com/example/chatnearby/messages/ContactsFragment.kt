@@ -61,21 +61,14 @@ class ContactsFragment : Fragment() {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val adapter = GroupAdapter<ViewHolder>()
-                var curLon = 0.0
                 dataSnapshot.children.forEach {
                     Log.d(TAG, it.toString())
                     @Suppress("NestedLambdaShadowedImplicitParameter")
                     it.getValue(User::class.java)?.let {
                         var id  = FirebaseAuth.getInstance().uid
-
-                        if (it.uid == id) {
-                            curLon = it.lon
-                        }
                         if (it.uid != id){
                             //here judge the lat and lon
-                            if (it.lon < curLon) {
-                                adapter.add(UserItem(it, requireContext()))
-                            }
+                            adapter.add(UserItem(it, requireContext()))
                         }
                     }
                 }

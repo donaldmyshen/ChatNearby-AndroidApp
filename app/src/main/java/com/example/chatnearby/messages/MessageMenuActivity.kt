@@ -85,6 +85,7 @@ class MessageMenuActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    // buttons on title bar
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
 

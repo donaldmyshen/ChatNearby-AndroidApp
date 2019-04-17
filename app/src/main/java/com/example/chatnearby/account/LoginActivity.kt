@@ -54,6 +54,8 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
+
+
         back_to_register_textview.visibility = View.GONE
         loading_view.visibility = View.VISIBLE
 
