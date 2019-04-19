@@ -67,8 +67,26 @@ class ContactsFragment : Fragment() {
                     it.getValue(User::class.java)?.let {
                         var id  = FirebaseAuth.getInstance().uid
                         if (it.uid != id){
-                            //here judge the lat and lon
-                            adapter.add(UserItem(it, requireContext()))
+                            TODO("not work here")
+                            var users : ArrayList<String>? = ArrayList()
+                            val dbRef = FirebaseDatabase.getInstance().getReference("users/${FirebaseAuth.getInstance().currentUser?.uid}")
+                            val contacts = dbRef.child("contacts")
+
+                            contacts.addListenerForSingleValueEvent(object : ValueEventListener {
+                                override fun onCancelled(p0: DatabaseError) {
+                                }
+
+                                override fun onDataChange(p0: DataSnapshot) {
+                                     users = p0.value as? ArrayList<String>
+                                    // if array is null filled to add here
+
+                                }
+                            })
+                            if (!users.isNullOrEmpty()){
+                                for (i in users!!) {
+                                    adapter.add(UserItem(it, requireContext()))
+                                }
+                            }
                         }
                     }
                 }

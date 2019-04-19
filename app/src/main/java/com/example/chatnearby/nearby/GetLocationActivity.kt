@@ -1,5 +1,6 @@
 package com.example.chatnearby.nearby
 
+import android.app.ActionBar
 import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -9,12 +10,18 @@ import com.example.chatnearby.R
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_get_location.*
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.chatnearby.messages.ChatLogActivity
 import com.example.chatnearby.messages.MessageMenuActivity
 import com.example.chatnearby.models.User
 import com.example.chatnearby.views.BigImageDialog
@@ -68,16 +75,39 @@ class GetLocationActivity : AppCompatActivity() {
 
         startLocationUpdates()
 
-
         swiperefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent))
 
-        supportActionBar?.title = "Select User"
+        supportActionBar?.title = "Pull down to find user nearby"
 
+        Glide.with(this).asGif()
+            .load("https://media1.tenor.com/images/d6cd5151c04765d1992edfde14483068/tenor.gif?itemid=5662595")
+            .apply(RequestOptions.circleCropTransform())
+            .into(loading)
         fetchUsers()
 
         swiperefresh.setOnRefreshListener {
             fetchUsers()
+            loading.visibility = View.GONE
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.return_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    // buttons on title bar
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+
+            R.id.menu_back -> {
+                val intent = Intent(this, MessageMenuActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {
@@ -128,7 +158,6 @@ class GetLocationActivity : AppCompatActivity() {
         }
     }
 
-
     // distance calculate algorithm
     private fun getDistandce(myLat: Double, myLong: Double, hisLat: Double, hisLong: Double) : Double {
         // 角度转为弧度
@@ -136,7 +165,6 @@ class GetLocationActivity : AppCompatActivity() {
         var lon1: Double = myLong * Math.PI/180.0
         var lat2: Double = hisLat * Math.PI/180.0
         var lon2: Double = hisLong * Math.PI/180.0
-
 
         val a = 6378137.0 // WGS84 major axis
         val b = 6356752.3142 // WGS84 semi-major axis
@@ -237,8 +265,8 @@ class GetLocationActivity : AppCompatActivity() {
         var myLon = 0.0
         var myLat = 0.0
         if (currentUser != null) {
-             myLon = currentUser!!.lon
-             myLat = currentUser!!.lat
+            myLon = currentUser!!.lon
+            myLat = currentUser!!.lat
         }
 
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -260,20 +288,46 @@ class GetLocationActivity : AppCompatActivity() {
                             //here judge the lat and lon
                             var dis = getDistandce(myLat,myLon,it.lat,it.lon)
                             if (dis < 1.0) {
-                            adapter.add(UserItem(it, this@GetLocationActivity))
+                                adapter.add(UserItem(it, this@GetLocationActivity))
                             }
                         }
                     }
                 }
 
-                adapter.setOnItemClickListener { item, view ->
-                    val userItem = item as UserItem
-                    val intent = Intent(view.context, ChatLogActivity::class.java)
-                    intent.putExtra(USER_KEY, userItem.user)
-                    startActivity(intent)
-                    finish()
-                }
+                // need to change here when tap
+                adapter.setOnItemClickListener { item, _ ->
+                    //                    val userItem = item as UserItem
+//                    val intent = Intent(view.context, ChatLogActivity::class.java)
+//                    intent.putExtra(USER_KEY, userItem.user)
+//                    startActivity(intent)
+//                    finish()
 
+                    val dialog = Dialog(this@GetLocationActivity)
+                    dialog.setContentView(R.layout.dialog_add_contact)
+
+                    val window = dialog.window
+                    window?.setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT)
+                    TODO("can't add to emty; duplicate add allowed ")
+                    dialog.findViewById<Button>(R.id.yes).setOnClickListener {
+                        var users : ArrayList<String>? = ArrayList()
+
+                        val dbRef = FirebaseDatabase.getInstance().getReference("users/${FirebaseAuth.getInstance().currentUser?.uid}")
+
+                        val contacts = dbRef.child("contacts")
+                        contacts.addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onCancelled(p0: DatabaseError) {
+                            }
+
+                            override fun onDataChange(p0: DataSnapshot) {
+                                users = p0.value as? ArrayList<String>
+                                // if array is null filled to add here
+                                users?.add((item as? UserItem)?.user!!.uid)
+                                contacts.setValue(users)
+                            }
+                        })
+                    }
+                    dialog.show()
+                }
                 recyclerview_newmessage.adapter = adapter
                 swiperefresh.isRefreshing = false
             }
@@ -296,6 +350,8 @@ class UserItem(val user: User, val context: Context) : Item<ViewHolder>() {
                 .apply(requestOptions)
                 .into(viewHolder.itemView.imageview_new_message)
 
+            viewHolder.itemView.user_id.text = user.uid
+
             viewHolder.itemView.imageview_new_message.setOnClickListener {
                 BigImageDialog.newInstance(user?.profileImageUrl!!).show((context as Activity).fragmentManager
                     , "")
@@ -306,7 +362,6 @@ class UserItem(val user: User, val context: Context) : Item<ViewHolder>() {
     override fun getLayout(): Int {
         return R.layout.user_row_new_message
     }
-
 }
 
 

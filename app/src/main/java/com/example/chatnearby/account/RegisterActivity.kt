@@ -172,9 +172,9 @@ class RegisterActivity : AppCompatActivity() {
 
         val user = if (profileImageUrl == null) {
             // lon and lat need to get here
-            User(uid, name_edittext_register.text.toString(), myLong, myLat, null)
+            User(uid, name_edittext_register.text.toString(), myLong, myLat, null, ArrayList())
         } else {
-            User(uid, name_edittext_register.text.toString(), myLong, myLat, profileImageUrl)
+            User(uid, name_edittext_register.text.toString(), myLong, myLat, profileImageUrl, ArrayList())
         }
 
         ref.setValue(user)

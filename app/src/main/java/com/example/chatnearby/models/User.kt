@@ -9,7 +9,8 @@ data class User(
     val name: String,
     var lon : Double,
     var lat : Double,
-    val profileImageUrl: String?
+    val profileImageUrl: String?,
+    var contacts : ArrayList<String>?
 ) : Parcelable {
-    constructor() : this("", "", 0.0,0.0,"")
+    constructor() : this("", "", 0.0,0.0,"", ArrayList<String>())
 }

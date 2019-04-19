@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+              android:text="Add Contact?"
+              android:id="@+id/textView"
+              app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button android:id="@+id/yes" android:layout_marginTop="20dp" android:text="YES" android:layout_width="match_parent" android:layout_height="wrap_content" app:layout_constraintTop_toBottomOf="@+id/textView"/>
+
+</android.support.constraint.ConstraintLayout>

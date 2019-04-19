@@ -36,4 +36,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageview_new_message"
         app:layout_constraintTop_toTopOf="@+id/imageview_new_message"/>
+
+
+
+    <TextView android:id="@+id/user_id" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content"
+              tools:ignore="MissingConstraints"/>
+
 </android.support.constraint.ConstraintLayout>

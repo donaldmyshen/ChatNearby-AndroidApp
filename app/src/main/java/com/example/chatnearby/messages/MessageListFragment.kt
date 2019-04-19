@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import com.example.chatnearby.R
 import com.example.chatnearby.account.RegisterActivity
 import com.example.chatnearby.models.ChatMessage
-import com.example.chatnearby.models.User
 import com.example.chatnearby.views.LatestMessageRow
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
