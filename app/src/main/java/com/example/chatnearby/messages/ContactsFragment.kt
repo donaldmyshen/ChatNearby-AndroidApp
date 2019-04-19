@@ -67,7 +67,7 @@ class ContactsFragment : Fragment() {
                     it.getValue(User::class.java)?.let {
                         var id  = FirebaseAuth.getInstance().uid
                         if (it.uid != id){
-                            TODO("not work here")
+                            //TODO("not work here")
                             var users : ArrayList<String>? = ArrayList()
                             val dbRef = FirebaseDatabase.getInstance().getReference("users/${FirebaseAuth.getInstance().currentUser?.uid}")
                             val contacts = dbRef.child("contacts")

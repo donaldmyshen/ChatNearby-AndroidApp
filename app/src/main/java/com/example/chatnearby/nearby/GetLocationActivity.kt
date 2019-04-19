@@ -307,21 +307,21 @@ class GetLocationActivity : AppCompatActivity() {
 
                     val window = dialog.window
                     window?.setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT)
-                    TODO("can't add to emty; duplicate add allowed ")
+                    // I've changed user' field  but probably not correct
                     dialog.findViewById<Button>(R.id.yes).setOnClickListener {
                         var users : ArrayList<String>? = ArrayList()
-
                         val dbRef = FirebaseDatabase.getInstance().getReference("users/${FirebaseAuth.getInstance().currentUser?.uid}")
-
                         val contacts = dbRef.child("contacts")
                         contacts.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onCancelled(p0: DatabaseError) {
                             }
-
                             override fun onDataChange(p0: DataSnapshot) {
                                 users = p0.value as? ArrayList<String>
                                 // if array is null filled to add here
-                                users?.add((item as? UserItem)?.user!!.uid)
+                                var user = (item as? UserItem)?.user!!.uid
+                                if (!users!!.contains(user)){
+                                    users!!.add(user)
+                                }
                                 contacts.setValue(users)
                             }
                         })

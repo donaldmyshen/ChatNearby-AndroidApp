@@ -10,7 +10,7 @@ data class User(
     var lon : Double,
     var lat : Double,
     val profileImageUrl: String?,
-    var contacts : ArrayList<String>?
+    var contacts : ArrayList<String>? = arrayListOf(uid)
 ) : Parcelable {
     constructor() : this("", "", 0.0,0.0,"", ArrayList<String>())
 }

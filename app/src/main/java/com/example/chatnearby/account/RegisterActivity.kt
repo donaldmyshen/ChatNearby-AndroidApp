@@ -170,11 +170,13 @@ class RegisterActivity : AppCompatActivity() {
         val uid = FirebaseAuth.getInstance().uid ?: return
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
 
+        var list = arrayListOf<String>()
+        list.add(uid)
+
         val user = if (profileImageUrl == null) {
-            // lon and lat need to get here
-            User(uid, name_edittext_register.text.toString(), myLong, myLat, null, ArrayList())
+            User(uid, name_edittext_register.text.toString(), myLong, myLat, null, list)
         } else {
-            User(uid, name_edittext_register.text.toString(), myLong, myLat, profileImageUrl, ArrayList())
+            User(uid, name_edittext_register.text.toString(), myLong, myLat, profileImageUrl, list)
         }
 
         ref.setValue(user)
