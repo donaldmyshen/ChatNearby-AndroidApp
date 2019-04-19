@@ -123,6 +123,4 @@ class MessageListFragment : Fragment() {
             startActivity(intent)
         }
     }
-
-
 }

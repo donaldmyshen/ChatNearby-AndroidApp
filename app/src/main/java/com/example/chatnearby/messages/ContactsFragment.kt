@@ -78,12 +78,11 @@ class ContactsFragment : Fragment() {
 
                                 override fun onDataChange(p0: DataSnapshot) {
                                      users = p0.value as? ArrayList<String>
-                                    // if array is null filled to add here
-
                                 }
                             })
-                            if (!users.isNullOrEmpty()){
-                                for (i in users!!) {
+                            // successful contacts arraylist here
+                            for (i in users!!) {
+                                if (i == it.uid) {
                                     adapter.add(UserItem(it, requireContext()))
                                 }
                             }
@@ -96,7 +95,6 @@ class ContactsFragment : Fragment() {
                     val intent = Intent(view.context, ChatLogActivity::class.java)
                     intent.putExtra(USER_KEY, userItem.user)
                     startActivity(intent)
-
                 }
 
                 recyclerview_newmessage.adapter = adapter
@@ -122,6 +120,8 @@ class UserItem(val user: User, val context: Context) : Item<ViewHolder>() {
                 .apply(requestOptions)
                 .into(viewHolder.itemView.imageview_new_message)
 
+            viewHolder.itemView.user_id.text = user.uid
+
             viewHolder.itemView.imageview_new_message.setOnClickListener {
                 BigImageDialog.newInstance(user?.profileImageUrl!!).show((context as Activity).fragmentManager
                     , "")
@@ -132,5 +132,4 @@ class UserItem(val user: User, val context: Context) : Item<ViewHolder>() {
     override fun getLayout(): Int {
         return R.layout.user_row_new_message
     }
-
 }

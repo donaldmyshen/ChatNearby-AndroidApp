@@ -276,17 +276,13 @@ class GetLocationActivity : AppCompatActivity() {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val adapter = GroupAdapter<ViewHolder>()
-
-
                 dataSnapshot.children.forEach {
                     Log.d(TAG, it.toString())
                     @Suppress("NestedLambdaShadowedImplicitParameter")
                     it.getValue(User::class.java)?.let {
-                        //var id  = FirebaseAuth.getInstance().uid
-
                         if (it.uid != uid){
-                            //here judge the lat and lon
                             var dis = getDistandce(myLat,myLon,it.lat,it.lon)
+                            //here compare the distance
                             if (dis < 1.0) {
                                 adapter.add(UserItem(it, this@GetLocationActivity))
                             }
@@ -294,20 +290,12 @@ class GetLocationActivity : AppCompatActivity() {
                     }
                 }
 
-                // need to change here when tap
                 adapter.setOnItemClickListener { item, _ ->
-                    //                    val userItem = item as UserItem
-//                    val intent = Intent(view.context, ChatLogActivity::class.java)
-//                    intent.putExtra(USER_KEY, userItem.user)
-//                    startActivity(intent)
-//                    finish()
-
                     val dialog = Dialog(this@GetLocationActivity)
                     dialog.setContentView(R.layout.dialog_add_contact)
-
                     val window = dialog.window
                     window?.setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT)
-                    // I've changed user' field  but probably not correct
+                    // TODO("dialog to ugly need to change")
                     dialog.findViewById<Button>(R.id.yes).setOnClickListener {
                         var users : ArrayList<String>? = ArrayList()
                         val dbRef = FirebaseDatabase.getInstance().getReference("users/${FirebaseAuth.getInstance().currentUser?.uid}")
@@ -317,7 +305,6 @@ class GetLocationActivity : AppCompatActivity() {
                             }
                             override fun onDataChange(p0: DataSnapshot) {
                                 users = p0.value as? ArrayList<String>
-                                // if array is null filled to add here
                                 var user = (item as? UserItem)?.user!!.uid
                                 if (!users!!.contains(user)){
                                     users!!.add(user)
@@ -363,6 +350,3 @@ class UserItem(val user: User, val context: Context) : Item<ViewHolder>() {
         return R.layout.user_row_new_message
     }
 }
-
-
-
