@@ -13,6 +13,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -20,6 +21,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.chatnearby.messages.MessageMenuActivity
@@ -104,6 +106,8 @@ class GetLocationActivity : AppCompatActivity() {
                 val intent = Intent(this, MessageMenuActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
+                overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left)
+
             }
         }
 
@@ -291,7 +295,7 @@ class GetLocationActivity : AppCompatActivity() {
                 }
 
                 adapter.setOnItemClickListener { item, _ ->
-                    val dialog = Dialog(this@GetLocationActivity)
+                    val dialog = Dialog(this@GetLocationActivity,R.style.dialog)
                     dialog.setContentView(R.layout.dialog_add_contact)
                     val window = dialog.window
                     window?.setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT)
@@ -306,14 +310,21 @@ class GetLocationActivity : AppCompatActivity() {
                             override fun onDataChange(p0: DataSnapshot) {
                                 users = p0.value as? ArrayList<String>
                                 var user = (item as? UserItem)?.user!!.uid
-                                if (!users!!.contains(user)){
+                                if (users!!.contains(user)){
+                                    Toast.makeText(this@GetLocationActivity,"Already in your contacts",Toast.LENGTH_SHORT).show()
+                                }
+                                else if (!users!!.contains(user)){
                                     users!!.add(user)
+                                    Toast.makeText(this@GetLocationActivity,"Add successful",Toast.LENGTH_SHORT).show()
                                 }
                                 contacts.setValue(users)
                             }
                         })
                     }
                     dialog.show()
+                    dialog.findViewById<Button>(R.id.cancel).setOnClickListener {
+                        dialog.dismiss()
+                    }
                 }
                 recyclerview_newmessage.adapter = adapter
                 swiperefresh.isRefreshing = false
@@ -349,4 +360,6 @@ class UserItem(val user: User, val context: Context) : Item<ViewHolder>() {
     override fun getLayout(): Int {
         return R.layout.user_row_new_message
     }
+
+
 }

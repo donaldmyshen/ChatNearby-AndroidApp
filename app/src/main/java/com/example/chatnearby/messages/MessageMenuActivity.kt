@@ -75,11 +75,6 @@ class MessageMenuActivity : AppCompatActivity() {
         }
     }
 
-
-
-
-
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.nav_menu, menu)
         return super.onCreateOptionsMenu(menu)
@@ -94,12 +89,14 @@ class MessageMenuActivity : AppCompatActivity() {
                 val intent = Intent(this, RegisterActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
+                overridePendingTransition(R.anim.enter, R.anim.exit)
             }
 
             R.id.menu_get_loc -> {
                 val intent = Intent(this, GetLocationActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
+                overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left)
             }
         }
 

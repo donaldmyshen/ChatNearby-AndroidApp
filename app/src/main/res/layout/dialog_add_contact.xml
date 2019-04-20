@@ -1,14 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="@drawable/background"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:layout_height="match_parent"
+        android:padding="12dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-              android:text="Add Contact?"
+
+
+    <TextView android:layout_width="match_parent" android:layout_height="53dp"
+              android:text="Add to Contact?"
               android:id="@+id/textView"
-              app:layout_constraintTop_toTopOf="parent"/>
+              android:textColor="#FFF"
+              android:textSize="25dp"
+              android:textStyle="bold"
+              android:gravity="center"
 
-    <Button android:id="@+id/yes" android:layout_marginTop="20dp" android:text="YES" android:layout_width="match_parent" android:layout_height="wrap_content" app:layout_constraintTop_toBottomOf="@+id/textView"/>
+    />
+
+    <Button android:id="@+id/yes"
+            android:layout_marginTop="20dp"
+            android:text="YES"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:background="@drawable/rounded_button"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView" android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/cancel" android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.0"/>
+
+    <Button android:id="@+id/cancel"
+            android:text="Cancel"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="160dp"
+            android:layout_height="50dp"
+            android:background="@drawable/rounded_button"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            android:layout_marginTop="20dp" android:layout_marginEnd="16dp" app:layout_constraintEnd_toEndOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>
