@@ -26,6 +26,7 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_new_message.*
 import kotlinx.android.synthetic.main.user_row_new_message.view.*
+import java.util.HashSet
 
 class ContactsFragment : Fragment() {
 
@@ -52,9 +53,25 @@ class ContactsFragment : Fragment() {
 
     private fun fetchUsers() {
         swiperefresh.isRefreshing = true
+        var uid  = FirebaseAuth.getInstance().uid
+        var friend = HashSet<String>()
+        val ref2 = FirebaseDatabase.getInstance().getReference("/users/$uid/contacts")
+        ref2.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(databaseError: DatabaseError) {
+            }
 
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                dataSnapshot.children.forEach {
+                    var friId = it.getValue()
+                    friend.add(friId.toString())
+                    Log.d(TAG, friId.toString())
+                    // print(it.toString())
+                }
+            }
+        })
+        //var test = friend
         val ref = FirebaseDatabase.getInstance().getReference("/users")
-        val s = ref.child("uid").equals("6gCAyWGL2qQhTdj06nNAVSD3O9z2")
+
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {
             }
@@ -62,30 +79,14 @@ class ContactsFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val adapter = GroupAdapter<ViewHolder>()
                 dataSnapshot.children.forEach {
-                    Log.d(TAG, it.toString())
+                    // Log.d(TAG, it.toString())
                     @Suppress("NestedLambdaShadowedImplicitParameter")
                     it.getValue(User::class.java)?.let {
-                        var id  = FirebaseAuth.getInstance().uid
-                        if (it.uid != id){
+                        // var id  = FirebaseAuth.getInstance().uid
+                        // var curId = it.toString()
+                        if (it.uid != uid && friend.contains(it.uid)) {
                             //TODO("not work here")
-                            var users : ArrayList<String>? = ArrayList()
-                            val dbRef = FirebaseDatabase.getInstance().getReference("users/${FirebaseAuth.getInstance().currentUser?.uid}")
-                            val contacts = dbRef.child("contacts")
-
-                            contacts.addListenerForSingleValueEvent(object : ValueEventListener {
-                                override fun onCancelled(p0: DatabaseError) {
-                                }
-
-                                override fun onDataChange(p0: DataSnapshot) {
-                                     users = p0.value as? ArrayList<String>
-                                }
-                            })
-                            // successful contacts arraylist here
-                            for (i in users!!) {
-                                if (i == it.uid) {
-                                    adapter.add(UserItem(it, requireContext()))
-                                }
-                            }
+                            adapter.add(UserItem(it, requireContext()))
                         }
                     }
                 }
