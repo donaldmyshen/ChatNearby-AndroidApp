@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object DateUtils {
-
     val fullFormattedTime = SimpleDateFormat("d MMM, h:mm a", Locale.US) // the format of your date
     val onlyTime = SimpleDateFormat("h:mm a", Locale.US) // the format of your date
     val onlyDate = SimpleDateFormat("d MMM", Locale.US) // the format of your date

@@ -27,16 +27,10 @@ import kotlinx.android.synthetic.main.fragment_latest_messages.*
 
 class MessageMenuActivity : AppCompatActivity() {
 
-
-    //private val adapter = GroupAdapter<ViewHolder>()
-
-    // private val latestMessagesMap = HashMap<String, ChatMessage>()
-
     companion object {
         var currentUser: User? = null
         //val TAG = MessageMenuActivity::class.java.simpleName
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

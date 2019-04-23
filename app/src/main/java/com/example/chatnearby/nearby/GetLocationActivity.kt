@@ -47,6 +47,7 @@ class GetLocationActivity : AppCompatActivity() {
     var currentUser: User? = null
     private var locationUpdateState = false
 
+    // tricky test function
     fun testMePlease(a:Int):Boolean{
         if (a > 0) return true
         return false
@@ -68,11 +69,8 @@ class GetLocationActivity : AppCompatActivity() {
         locationCallback = object :LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 super.onLocationResult(p0)
-
                 var lastLocation = p0.lastLocation
-
                 val uid = FirebaseAuth.getInstance().uid ?: return
-
                 val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
                 //HashMap<String, O>
                 ref.child("lat").setValue(lastLocation.latitude)
@@ -85,7 +83,7 @@ class GetLocationActivity : AppCompatActivity() {
         swiperefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent))
 
         supportActionBar?.title = "Pull down to find user nearby"
-
+        // load a gif when waiting for a gesture
         Glide.with(this).asGif()
             .load("https://media1.tenor.com/images/d6cd5151c04765d1992edfde14483068/tenor.gif?itemid=5662595")
             .apply(RequestOptions.circleCropTransform())
@@ -149,9 +147,7 @@ class GetLocationActivity : AppCompatActivity() {
 
     private fun createLocationRequest() {
         locationRequest = LocationRequest()
-
         locationRequest.interval = 10000
-
         locationRequest.fastestInterval = 5000
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
@@ -275,16 +271,17 @@ class GetLocationActivity : AppCompatActivity() {
                     Log.d(TAG, it.toString())
                     @Suppress("NestedLambdaShadowedImplicitParameter")
                     it.getValue(User::class.java)?.let {
+                        // calculate distance with all others
                         if (it.uid != uid){
                             var dis = getDistandce(myLat,myLon,it.lat,it.lon)
-                            //here compare the distance
+                            //here compare the distance, load the user in range
                             if (dis < 1.0) {
                                 adapter.add(UserItem(it, this@GetLocationActivity))
                             }
                         }
                     }
                 }
-
+                // use a dialog to add user to contact
                 adapter.setOnItemClickListener { item, _ ->
                     val dialog = Dialog(this@GetLocationActivity,R.style.dialog)
                     dialog.setContentView(R.layout.dialog_add_contact)
@@ -300,6 +297,7 @@ class GetLocationActivity : AppCompatActivity() {
                             override fun onDataChange(p0: DataSnapshot) {
                                 users = p0.value as? ArrayList<String>
                                 var user = (item as? UserItem)?.user!!.uid
+                                // in case duplicate adding
                                 if (users!!.contains(user)){
                                     Toast.makeText(this@GetLocationActivity,"Already in your contacts",Toast.LENGTH_SHORT).show()
                                 }
@@ -324,6 +322,7 @@ class GetLocationActivity : AppCompatActivity() {
     }
 }
 
+// front end
 class UserItem(val user: User, val context: Context) : Item<ViewHolder>() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
@@ -350,6 +349,4 @@ class UserItem(val user: User, val context: Context) : Item<ViewHolder>() {
     override fun getLayout(): Int {
         return R.layout.user_row_new_message
     }
-
-
 }

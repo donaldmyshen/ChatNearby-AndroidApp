@@ -26,7 +26,7 @@ class ChatLogActivity : AppCompatActivity() {
         const val USER_KEY = "USER_KEY"
         val TAG = ChatLogActivity::class.java.simpleName
     }
-
+    // special adapter used here as a holder's holder
     val adapter = GroupAdapter<ViewHolder>()
 
     // Bundle Data
@@ -45,6 +45,7 @@ class ChatLogActivity : AppCompatActivity() {
 
         listenForMessages()
 
+        // send message
         send_button_chat_log.setOnClickListener {
             performSendMessage()
         }
@@ -84,6 +85,7 @@ class ChatLogActivity : AppCompatActivity() {
 
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 dataSnapshot.getValue(ChatMessage::class.java)?.let {
+                    // distinguish from who to who by uid
                     if (it.fromId == FirebaseAuth.getInstance().uid) {
                         val currentUser = MessageMenuActivity.currentUser ?: return
                         adapter.add(ChatFromItem(it.text, currentUser, it.timestamp))
@@ -95,7 +97,6 @@ class ChatLogActivity : AppCompatActivity() {
                 swiperefresh.isRefreshing = false
                 swiperefresh.isEnabled = false
             }
-
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
             }
 
@@ -136,6 +137,7 @@ class ChatLogActivity : AppCompatActivity() {
 
 }
 
+// front end
 class ChatFromItem(val text: String, val user: User, val timestamp: Long) : Item<ViewHolder>() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
@@ -149,13 +151,11 @@ class ChatFromItem(val text: String, val user: User, val timestamp: Long) : Item
 
             val requestOptions = RequestOptions().placeholder(R.drawable.no_image2)
 
-
             Glide.with(targetImageView.context)
                 .load(user.profileImageUrl)
                 .thumbnail(0.1f)
                 .apply(requestOptions)
                 .into(targetImageView)
-
         }
     }
 
@@ -182,7 +182,6 @@ class ChatToItem(val text: String, val user: User, val timestamp: Long) : Item<V
                 .thumbnail(0.1f)
                 .apply(requestOptions)
                 .into(targetImageView)
-
         }
     }
 

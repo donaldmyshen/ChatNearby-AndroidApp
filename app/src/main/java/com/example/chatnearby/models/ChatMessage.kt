@@ -6,7 +6,7 @@ class ChatMessage(
         val text: String,
         val fromId: String,
         val toId: String,
-        val timestamp: Long
+        val timestamp: Long // message time
 ) {
     constructor() : this("", "", "", "", -1)
 }

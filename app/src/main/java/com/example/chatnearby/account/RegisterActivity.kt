@@ -46,18 +46,19 @@ class RegisterActivity : AppCompatActivity() {
             performRegistration()
         }
 
+        // jump to log in
         already_have_account_text_view.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             overridePendingTransition(R.anim.enter, R.anim.exit)
         }
 
+        // choose the profile image
         selectphoto_button_register.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             startActivityForResult(intent, 0)
         }
-
 
         if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -109,7 +110,7 @@ class RegisterActivity : AppCompatActivity() {
         val email = email_edittext_register.text.toString()
         val password = password_edittext_register.text.toString()
         val name = name_edittext_register.text.toString()
-
+        // valid necessary information
         if (email.isEmpty() || password.isEmpty() || name.isEmpty()) {
             Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show()
             return
@@ -182,7 +183,6 @@ class RegisterActivity : AppCompatActivity() {
         ref.setValue(user)
             .addOnSuccessListener {
                 Log.d(TAG, "Finally we saved the user to Firebase Database")
-
                 val intent = Intent(this, MessageMenuActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
@@ -200,9 +200,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient : FusedLocationProviderClient
     private lateinit var locationRequest : LocationRequest
     private lateinit var locationCallback : LocationCallback
-
     private var locationUpdateState = false
-
 
     override fun onResume() {
         super.onResume()

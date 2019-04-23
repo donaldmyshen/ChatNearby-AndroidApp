@@ -24,7 +24,7 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setCustomView(R.layout.abs_layout)
         supportActionBar!!.elevation = 0.0f
-
+        // welcome gif
         Glide.with(this).asGif()
             .load("https://media1.tenor.com/images/e9a2b43613bdde8dea94e81c4ca7e4c2/tenor.gif?itemid=5072286")
             .apply(RequestOptions.circleCropTransform())
@@ -54,8 +54,7 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-
-
+        // back to register
         back_to_register_textview.visibility = View.GONE
         loading_view.visibility = View.VISIBLE
 

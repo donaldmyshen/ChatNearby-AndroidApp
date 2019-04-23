@@ -42,9 +42,7 @@ class ContactsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         swiperefresh.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.colorAccent))
-
         //supportActionBar?.title = "Select User"
-
         fetchUsers()
         swiperefresh.setOnRefreshListener {
             fetchUsers()
@@ -69,9 +67,8 @@ class ContactsFragment : Fragment() {
                 }
             }
         })
-        //var test = friend
-        val ref = FirebaseDatabase.getInstance().getReference("/users")
 
+        val ref = FirebaseDatabase.getInstance().getReference("/users")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(databaseError: DatabaseError) {
             }
@@ -82,8 +79,7 @@ class ContactsFragment : Fragment() {
                     // Log.d(TAG, it.toString())
                     @Suppress("NestedLambdaShadowedImplicitParameter")
                     it.getValue(User::class.java)?.let {
-                        // var id  = FirebaseAuth.getInstance().uid
-                        // var curId = it.toString()
+                        // check the contacts
                         if (it.uid != uid && friend.contains(it.uid)) {
                             adapter.add(UserItem(it, requireContext()))
                         }
@@ -105,7 +101,7 @@ class ContactsFragment : Fragment() {
     }
 }
 
-
+// front end
 class UserItem(val user: User, val context: Context) : Item<ViewHolder>() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
@@ -113,7 +109,6 @@ class UserItem(val user: User, val context: Context) : Item<ViewHolder>() {
 
         if (!user.profileImageUrl!!.isEmpty()) {
             val requestOptions = RequestOptions().placeholder(R.drawable.no_image2)
-
 
             Glide.with(viewHolder.itemView.imageview_new_message.context)
                 .load(user.profileImageUrl)
@@ -128,7 +123,6 @@ class UserItem(val user: User, val context: Context) : Item<ViewHolder>() {
             }
         }
     }
-
     override fun getLayout(): Int {
         return R.layout.user_row_new_message
     }

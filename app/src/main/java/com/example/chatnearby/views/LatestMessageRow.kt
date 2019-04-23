@@ -59,13 +59,10 @@ class LatestMessageRow(val chatMessage: ChatMessage, val context: MessageListFra
                         BigImageDialog.newInstance(chatPartnerUser?.profileImageUrl!!).show((context as Activity).fragmentManager
                             , "")
                     }
-
                 }
             }
 
         })
-
-
     }
 
 }

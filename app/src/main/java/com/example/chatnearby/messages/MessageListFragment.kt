@@ -33,7 +33,6 @@ class MessageListFragment : Fragment() {
         return layoutInflater.inflate(R.layout.fragment_latest_messages, container, false)
     }
 
-
     override fun onStart() {
         super.onStart()
 
@@ -113,8 +112,7 @@ class MessageListFragment : Fragment() {
         swiperefresh.isRefreshing = false
     }
 
-
-
+    // verify account before load messages
     private fun verifyUserIsLoggedIn() {
         val uid = FirebaseAuth.getInstance().uid
         if (uid == null) {
