@@ -234,18 +234,13 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun createLocationRequest() {
         locationRequest = LocationRequest()
-
         locationRequest.interval = 10000
-
         locationRequest.fastestInterval = 5000
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-
         var builder = LocationSettingsRequest.Builder()
             .addLocationRequest(locationRequest)
-
         val client = LocationServices.getSettingsClient(this)
         val task = client.checkLocationSettings(builder.build())
-
         task.addOnSuccessListener {
             locationUpdateState = true
             startLocationUpdates()

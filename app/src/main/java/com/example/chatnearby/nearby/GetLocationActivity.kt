@@ -47,6 +47,11 @@ class GetLocationActivity : AppCompatActivity() {
     var currentUser: User? = null
     private var locationUpdateState = false
 
+    fun testMePlease(a:Int):Boolean{
+        if (a > 0) return true
+        return false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_get_location)
@@ -163,8 +168,7 @@ class GetLocationActivity : AppCompatActivity() {
     }
 
     // distance calculate algorithm
-    private fun getDistandce(myLat: Double, myLong: Double, hisLat: Double, hisLong: Double) : Double {
-        // 角度转为弧度
+    fun getDistandce(myLat: Double, myLong: Double, hisLat: Double, hisLong: Double) : Double {
         var lat1 :Double = myLat * Math.PI/180.0
         var lon1: Double = myLong * Math.PI/180.0
         var lat2: Double = hisLat * Math.PI/180.0
@@ -203,40 +207,29 @@ class GetLocationActivity : AppCompatActivity() {
             sinLambda = Math.sin(lambda)
             val t1 = cosU2 * sinLambda
             val t2 = cosU1 * sinU2 - sinU1 * cosU2 * cosLambda
-            val sinSqSigma = t1 * t1 + t2 * t2 // (14)
+            val sinSqSigma = t1 * t1 + t2 * t2
             sinSigma = Math.sqrt(sinSqSigma)
-            cosSigma = sinU1sinU2 + cosU1cosU2 * cosLambda // (15)
-            sigma = Math.atan2(sinSigma, cosSigma) // (16)
+            cosSigma = sinU1sinU2 + cosU1cosU2 * cosLambda
+            sigma = Math.atan2(sinSigma, cosSigma)
             val sinAlpha = if (sinSigma == 0.0)
                 0.0
             else
-                cosU1cosU2 * sinLambda / sinSigma // (17)
+                cosU1cosU2 * sinLambda / sinSigma
             cosSqAlpha = 1.0 - sinAlpha * sinAlpha
             cos2SM = if (cosSqAlpha == 0.0)
                 0.0
             else
-                cosSigma - 2.0 * sinU1sinU2 / cosSqAlpha // (18)
+                cosSigma - 2.0 * sinU1sinU2 / cosSqAlpha
 
-            val uSquared = cosSqAlpha * aSqMinusBSqOverBSq // defn
-            A = 1 + uSquared / 16384.0 * // (3)
-                    (4096.0 + uSquared * (-768 + uSquared * (320.0 - 175.0 * uSquared)))
-            val B = uSquared / 1024.0 * // (4)
-                    (256.0 + uSquared * (-128.0 + uSquared * (74.0 - 47.0 * uSquared)))
-            val C = f / 16.0 *
-                    cosSqAlpha *
-                    (4.0 + f * (4.0 - 3.0 * cosSqAlpha)) // (10)
+            val uSquared = cosSqAlpha * aSqMinusBSqOverBSq
+            A = 1 + uSquared / 16384.0 * (4096.0 + uSquared * (-768 + uSquared * (320.0 - 175.0 * uSquared)))
+            val B = uSquared / 1024.0 * (256.0 + uSquared * (-128.0 + uSquared * (74.0 - 47.0 * uSquared)))
+            val C = f / 16.0 * cosSqAlpha * (4.0 + f * (4.0 - 3.0 * cosSqAlpha))
             val cos2SMSq = cos2SM * cos2SM
-            deltaSigma = B * sinSigma * // (6)
-
-                    (cos2SM + B / 4.0 * (cosSigma * (-1.0 + 2.0 * cos2SMSq) - B / 6.0 * cos2SM *
-                            (-3.0 + 4.0 * sinSigma * sinSigma) *
-                            (-3.0 + 4.0 * cos2SMSq)))
-
+            deltaSigma = B * sinSigma * (cos2SM + B / 4.0 * (cosSigma * (-1.0 + 2.0 * cos2SMSq) - B / 6.0 * cos2SM *
+                            (-3.0 + 4.0 * sinSigma * sinSigma) * (-3.0 + 4.0 * cos2SMSq)))
             lambda = L + (1.0 - C) * f * sinAlpha *
-                    (sigma + C * sinSigma *
-                            (cos2SM + C * cosSigma *
-                                    (-1.0 + 2.0 * cos2SM * cos2SM))) // (11)
-
+                    (sigma + C * sinSigma * (cos2SM + C * cosSigma * (-1.0 + 2.0 * cos2SM * cos2SM)))
             val delta = (lambda - lambdaOrig) / lambda
             if (Math.abs(delta) < 1.0e-12) {
                 break
@@ -250,9 +243,7 @@ class GetLocationActivity : AppCompatActivity() {
         private val TAG = GetLocationActivity::class.java.simpleName
     }
 
-
-
-    private fun fetchUsers() {
+    fun fetchUsers() {
         swiperefresh.isRefreshing = true
         val uid = FirebaseAuth.getInstance().uid ?: return
         val ref = FirebaseDatabase.getInstance().getReference("/users")
@@ -299,7 +290,6 @@ class GetLocationActivity : AppCompatActivity() {
                     dialog.setContentView(R.layout.dialog_add_contact)
                     val window = dialog.window
                     window?.setLayout(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT)
-                    // TODO("dialog to ugly need to change")
                     dialog.findViewById<Button>(R.id.yes).setOnClickListener {
                         var users : ArrayList<String>? = ArrayList()
                         val dbRef = FirebaseDatabase.getInstance().getReference("users/${FirebaseAuth.getInstance().currentUser?.uid}")

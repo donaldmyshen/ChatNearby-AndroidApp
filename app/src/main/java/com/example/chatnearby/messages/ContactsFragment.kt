@@ -85,7 +85,6 @@ class ContactsFragment : Fragment() {
                         // var id  = FirebaseAuth.getInstance().uid
                         // var curId = it.toString()
                         if (it.uid != uid && friend.contains(it.uid)) {
-                            //TODO("not work here")
                             adapter.add(UserItem(it, requireContext()))
                         }
                     }
