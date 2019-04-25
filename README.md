@@ -48,5 +48,3 @@ Some screen shots as floowing:
     ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/contacts.png)
     ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/loading.png)
     ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/nearby.png)
-asd13
-asd
