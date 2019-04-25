@@ -42,9 +42,9 @@ Further plan
 Demo
 ------
 Some screen shots as floowing: 
-    ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/register.png)
-    ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/login.png)
-    ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/menu.png)
-    ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/contacts.png)
-    ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/loading.png)
-    ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/nearby.png)
+        ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/register.png)
+        ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/login.png)
+        ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/menu.png)
+        ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/contacts.png)
+        ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/loading.png)
+        ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/nearby.png)
