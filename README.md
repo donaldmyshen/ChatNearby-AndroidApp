@@ -14,6 +14,7 @@ Account management:
 
 Message mangement:
     ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/menu.png)
+    
     1. Load the recent connected user list, and contains user' image profile, lastest message and its time. 
     2. Can send and recieve text message as a chat APP should be. Load both users' image profiles, load message with sending time.
     
@@ -22,6 +23,7 @@ Contacts mangement:
     ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/contacts.png)
     ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/loading.png)
     ![image](https://github.com/donaldmyshen/ChatNearby/blob/master/image/nearby.png)
+    
     1. Use an algorithm to calculate the distance by given two points' latitude and longtitude.
     2. If distance is smaller than a certain threshold, the users will be load into a nearby list for check.
     3. Allow current user add other users from nearby list to cantacts.
